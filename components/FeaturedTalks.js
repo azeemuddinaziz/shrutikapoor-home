@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import ArrowIcon from './ArrowIcon';
+import YouTubeThumbnail from './YouTubeThumbnail';
 
 const FeaturedTalks = ({ talks }) => (
   <main className="w-full flex flex-col mt-12 mb-12 overflow-hidden">
@@ -26,15 +27,10 @@ const FeaturedTalks = ({ talks }) => (
             >
               <div className="overflow-hidden rounded-lg cursor-pointer">
                 {talk.data.link && (
-                  <iframe
-                    height="215"
-                    width="100%"
+                  <YouTubeThumbnail
                     src={talk.data.link}
                     title={talk.data.title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
+                  />
                 )}
                 <div className="py-4 px-3 block focus:outline-none focus:ring-4">
                   <h2 className="lg:text-lg md:text-xl font-semibold">

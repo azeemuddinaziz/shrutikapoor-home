@@ -11,6 +11,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import ArrowIcon from '../../components/ArrowIcon';
 import CustomLink from '../../components/CustomLink';
+import YouTubeThumbnail from '../../components/YouTubeThumbnail';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import Layout, { GradientBackground } from '../../components/Layout';
@@ -26,6 +27,12 @@ const components = {
   // useful for conditionally loading components for certain routes.
   // See the notes in README.md for more details.
   Head,
+  iframe: (props) => {
+    if (props.src && props.src.includes('youtube.com/embed')) {
+      return <YouTubeThumbnail src={props.src} title={props.title} />;
+    }
+    return <iframe {...props} />;
+  },
 };
 
 export default function PostPage({

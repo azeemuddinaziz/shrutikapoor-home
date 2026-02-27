@@ -1,0 +1,45 @@
+.wrapper {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.thumbnail {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: opacity 0.2s ease;
+}
+
+.wrapper:hover .thumbnail {
+  opacity: 0.85;
+}
+
+.playButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px;
+  height: 48px;
+  background-color: rgba(255, 0, 0, 0.85);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.playButton::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  transform: translate(-50%, -50%);
+  border-style: solid;
+  border-width: 10px 0 10px 18px;
+  border-color: transparent transparent transparent white;
+}
+
+.wrapper:hover .playButton {
+  background-color: rgba(255, 0, 0, 1);
+}
