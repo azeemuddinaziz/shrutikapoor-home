@@ -6,6 +6,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import ArrowIcon from '../../components/ArrowIcon';
 import CustomLink from '../../components/CustomLink';
+import YouTubeThumbnail from '../../components/YouTubeThumbnail';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import Layout, { GradientBackground } from '../../components/Layout';
@@ -21,6 +22,12 @@ const components = {
   // useful for conditionally loading components for certain routes.
   // See the notes in README.md for more details.
   Head,
+  iframe: (props) => {
+    if (props.src && props.src.includes('youtube.com/embed')) {
+      return <YouTubeThumbnail src={props.src} title={props.title} />;
+    }
+    return <iframe {...props} />;
+  },
 };
 
 export default function TalkPage({ source, frontMatter, globalData }) {
@@ -41,15 +48,10 @@ export default function TalkPage({ source, frontMatter, globalData }) {
           <article className="mx-auto prose dark:prose-dark">
             <p className="prose">{frontMatter.abstract} </p>
             {frontMatter.link && (
-              <iframe
-                height="515"
-                width="100%"
+              <YouTubeThumbnail
                 src={frontMatter.link}
                 title={frontMatter.title}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+              />
             )}
             <MDXRemote {...source} components={components} />
           </article>

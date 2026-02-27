@@ -9,6 +9,7 @@ import LayoutFullWidth, {
 import ArrowIcon from '../components/ArrowIcon';
 import { getGlobalData } from '../utils/global-data';
 import SEO from '../components/SEO';
+import YouTubeThumbnail from '../components/YouTubeThumbnail';
 
 export default function Talks({ talks, globalData }) {
   return (
@@ -29,15 +30,10 @@ export default function Talks({ talks, globalData }) {
               >
                 <div className="overflow-hidden rounded-lg cursor-pointer">
                   {talk.data.link && (
-                    <iframe
-                      height="215"
-                      width="100%"
+                    <YouTubeThumbnail
                       src={talk.data.link}
                       title={talk.data.title}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
+                    />
                   )}
                   <div className="py-4 px-3 block focus:outline-none focus:ring-4">
                     <h2 className="lg:text-lg md:text-xl font-semibold">
