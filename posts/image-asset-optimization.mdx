@@ -46,7 +46,7 @@ The first step is to compress your images to reduce their footprint.
 
 <img
   src="/images/image-asset-optimization/squoosh-compress-image.avif"
-  alt="Squoosh platform's UI after uploading the image for compression - showing before and after comparision, compressed size along with compressed percentage and compression algorithm used."
+  alt="Squoosh platform's UI after uploading the image for compression - showing before and after comparison, compressed size along with compressed percentage and compression algorithm used."
   style={{ margin: 'auto' }}
 />
 
@@ -149,7 +149,7 @@ The HTML `<picture>` element allows you to offer alternative versions of an imag
 ```
 
 <ol>
-	<li>`<source>` element offers same same media in multiple file formats based on the `media` attribute.</li>
+	<li>`<source>` element offers tbe same media in multiple file formats based on the `media` attribute.</li>
 
     <li>`<img>` element describes the size and other attributes of the image and its presentation and act as a fallback in case none of the offered `<source>` elements are able to provide a usable image.</li>
 
@@ -167,7 +167,7 @@ Though, we rendered the image using best compression algorithm by adding `q_auto
 
 Update all `<source>` elements `srcSet` attribute value with respective width parameter.
 
-> We can optimize subsequently loads of the same image using `Cache-Control` header but as we our using Cloudinary - caching is managed by the CDN itself.
+> We can optimize subsequently loads of the same image using `Cache-Control` header but as we are using Cloudinary - caching is managed by the CDN itself.
 
 ### Set the Priority: `fetchPriority`
 
