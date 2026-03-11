@@ -19,7 +19,7 @@ tags: Optimization, Images, React
 
 Does your app feel slow? Do users complain about content taking a long time to load? If your app has too many images, this guide will walk you through essential optimization techniques to fix those performance bottlenecks.
 
-If you prefer watching video, checkout that out on YouTube: <a target="_blank" href="https://youtu.be/7RqHs8TADOI?si=qWi7zAFPt-pWwrWp">Image Asset Optimizations</a>
+If you prefer watching video, checkout that out on YouTube: <a target="_blank" href="https://youtu.be/uNR28b8fgpg?si=D4n5uUNZjwG193r1">Image Asset Optimizations</a>
 
 We'll be optimizing the image assets for <a target="_blank" href="https://youtu.be/7RqHs8TADOI?si=qWi7zAFPt-pWwrWp">**Reactflix** (a Netflix clone)</a> and referring to it as our app throughout this blog.
 
@@ -31,6 +31,7 @@ Under the **Performance** tab in the DevTools, check for **"Improve image delive
 
 <img
   src="/images/image-asset-optimization/1-devtools-performance-tab.avif"
+  alt="Chrome DevTools Performance tab showing the Improve image delivery insight"
   style={{ margin: 'auto' }}
 />
 
@@ -45,6 +46,7 @@ The first step is to compress your images to reduce their footprint.
 
 <img
   src="/images/image-asset-optimization/squoosh-compress-image.avif"
+  alt="Squoosh platform's UI after uploading the image for compression - showing before and after comparision, compressed size along with compressed percentage and compression algorithm used."
   style={{ margin: 'auto' }}
 />
 
@@ -79,14 +81,14 @@ There are Command Line (CLI) tools available to convert your images into **AVIF*
   target="_blank"
   href="https://developer.chrome.com/docs/performance/insights/image-delivery#use_modern_image_formats"
 >
-  <i>Chrome for Developer Docs< for Modern Image Formats</i>
+  <i>Chrome for Developer Docs for Modern Image Formats</i>
 </a>
 
 ### Step 4: Automatic quality selection
 
 Cloudinary's intelligent quality and encoding algorithm analyzes an image to find the best quality compression level and optimal encoding settings based on the image content and the viewing browser, in order to produce an image with good visual quality while minimizing the file size.
 
-We can simply add a query paramater <code>q_auto</code> to our cloudinary image link and cloudinary will do it's magic.
+We can simply add the <code>q_auto</code> transformation to our Cloudinary image URL and Cloudinary will do its magic.
 
 Your link will look like this:
 `https://res.cloudinary.com/demo/image/upload/q_auto/hero-background.avif`
@@ -155,6 +157,7 @@ The HTML `<picture>` element allows you to offer alternative versions of an imag
 
 <img
   src="/images/image-asset-optimization/2-devtools-network-image-good.avif"
+  alt="Chrome DevTools Network tab showing the url change based on screensize specified in the picture element's source tag's srcset attribute"
   style={{ margin: 'auto' }}
 />
 
@@ -172,7 +175,7 @@ The `fetchPriority` attribute allows a developer to signal that fetching a parti
 
 In the `<img>` tag of our `<picture>` element add the attribute `fetchPriority="high"`, signalling this image is important to load.
 
-Additionally, for images such as hero image, developers can use <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/preload"><i>preloading</i></a> to complement the `fetchPriority` attribute and significantly contriuting to the webiste's <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/preload"><i>Largest Contentful Paint</i></a> (LCP).
+Additionally, for a hero image, developers can use <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/preload"><i>preloading</i></a> to complement the `fetchPriority` attribute and improve the website's <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Glossary/Largest_contentful_paint"><i>Largest Contentful Paint</i></a> (LCP).
 
 ```html
 <link
@@ -183,7 +186,7 @@ Additionally, for images such as hero image, developers can use <a target="_blan
 />
 ```
 
-Ensure, to add the `loading=lazy` attribute to `<img>` which does not require load until a user scrolls to the section. Read more about Lazy Loading <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Lazy_loading#images_and_iframes"><i>here</i></a>.
+Use `loading="lazy"` only for below-the-fold or otherwise non-critical images. Keep the hero/LCP image eager so the browser can discover and fetch it immediately. Read more about Lazy Loading <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Lazy_loading#images_and_iframes"><i>here</i></a>.
 
 <a
   target="_blank"
