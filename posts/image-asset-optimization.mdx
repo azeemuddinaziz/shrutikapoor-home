@@ -1,0 +1,181 @@
+---
+title: 'Image Asset Optimization'
+description: 'Your images are probably the #1 reason your React app feels slow. A 7-step image optimization checklist you can apply to any React app so you stop guessing and start shipping faster experiences.'
+date: February 27, 2026
+featuredImage: https://i.ytimg.com/vi/uNR28b8fgpg/maxresdefault.jpg
+tags: Optimization, Images, React
+---
+
+<iframe
+  width="720"
+  height="360"
+  src="https://www.youtube.com/embed/uNR28b8fgpg"
+  title="Image Asset Optimizations: Performance Optimizations in React"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen
+></iframe>
+
+Does your app feels slow? Users complain about content loading takes a lot of time? Does your app has too many images? If yes, in this blog will guide you through image optimization.
+
+If you prefer watching this blog as a video checkout the video on YouTube: <a target="_blank" href="https://youtu.be/7RqHs8TADOI?si=qWi7zAFPt-pWwrWp">Image Asset Optimizations</a>
+
+We'll be optimizing the image assets for Reactflix (a netflix clone - <a target="_blank" href="https://youtu.be/7RqHs8TADOI?si=qWi7zAFPt-pWwrWp">check out the tutorial full tutorial of building a netflix clone</a>) and we'll refer to it as our app throughout the blog.
+
+### Audit your app
+Before jumping directly to optimizing all assets present in the codebase - we should utilize tools like chrome dev tools to understand how are the current images are loading and what is the size of it. 
+
+Under the <strong>Performance</strong> tab in the dev tools, check out for <strong>Improve image delivery</strong> under the <strong>Insight</strong> section.
+
+<img
+  src="/images/image-asset-optimization/1-devtools-performance-tab.jpg"
+  style={{ margin: 'auto' }}
+/>
+
+The image <code>/hero-background.jpg</code> is has the largest size amongst other images in the list and it takes 8.88s to load, which is massive. Another thing to note here - the image is downloaded from our localhost and is a part of bundle and not being fetched from a CDN (We'll come to it later in this blog.)
+
+By fixing this image we can bring down the load time to a reasonably less time.
+
+#### Optimize the size
+There several tools available online to compress the images. We'll be using one of them, <a target="_blank" href="https://squoosh.app/">Squoosh</a> - the best thing about this tool is that you can see live how different compression algorithm will affect the image quality and size and compare with original image in one place. You don't need to download and compare to see it. Before and After is right in front of you.
+
+<img
+  src="/images/image-asset-optimization/squoosh-compress-image.png"
+  style={{ margin: 'auto' }}
+/>
+
+> If you want to compress a bulk of images, check out Command Line Tools (CLI Tools) which make the process much faster and easier. 
+>
+> Read about image compression <a target="_blank" href="https://developer.chrome.com/docs/performance/insights/image-delivery#increase_image_compression_factor">here</a>.
+
+### Content Delivery Network (CDN)
+
+A CDN is a distributed network of servers that serve static content for a website. Using CDN will help us in two ways:
+
+<ol>
+    <li>
+        <strong>Less bundle size:</strong> the image is seperately uploaded to cdn server and removed from the codebase, resulting in less bundle size.
+    </li>
+    <li>
+        <strong>Low latency:</strong> CDN provides edge servers across the globe and caches these files, which helps in delivering static assets to user based on nearest server - which is efficient.
+    </li>
+</ol>
+
+We'll be using <a target="_blank" href="https://cloudinary.com/">Cloudinary</a> as our CDN provider. Register/login on the platform and simply click on the "Upload" button on the top-right corner. And copy the cloudinary link for the uploaded image. Delete the image from our codebase and replace it with cloudinary link. And that's it the hero image is on CDN now and it improved
+
+<img
+  src="/images/image-asset-optimization/1-cloudinary-upload.jpg"
+  style={{ display: "none", margin: 'auto' }}
+/>
+
+The results are massive we took down the load time for image from 8.88s to 45.79ms. There you go, that is optimization all about.
+
+### Use modern image formats
+
+AVIF and WebP are image formats that have superior compression and quality characteristics compared to their older JPEG and PNG counterparts. Encoding your images in these newer formats is a good strategy to reduce the download size of images. Both the formats are supported in new versions of all major browsers. - <a target="_blank" href="https://developer.chrome.com/docs/performance/insights/image-delivery#use_modern_image_formats"><i>Chrome for Developer Docs</i></a>
+
+There both online and Command Line (CLI) tools available to convert images to WebP and AVIF but we don't need them because our CDN provider - Cloudinary, on-the-fly process the images and convert into both WebP and AVIF. 
+
+Simply changing the link from <code>https://res.cloudinary.com/demo/image/upload/hero-background.jpg</code> to <code>https://res.cloudinary.com/demo/image/upload/hero-background.avif</code> will serve the WebP/AVIF format image.
+
+#### Automatic quality selection by Cloudinary
+
+Cloudinary's intelligent quality and encoding algorithm analyzes an image to find the best quality compression level and optimal encoding settings based on the image content and the viewing browser, in order to produce an image with good visual quality while minimizing the file size.
+
+We can simply add a query paramater <code>q_auto</code> to our cloudinary image link and cloudinary will do it's magic. So, our link will look like:  
+
+<code>https://res.cloudinary.com/demo/image/upload/q_auto/hero-background.avif</code> 
+
+Addtionally, cloudinary provides setting to further fine the automatic quality selection:
+
+- <code>q_auto:best</code>: Less aggressive algorithm. Generates bigger files with potentially better visual quality. Example of a target audience: photography sites that display images with a high visual quality.
+
+- <code>q_auto:good</code>: nsuring a relatively small file size with good visual quality.
+
+- <code>q_auto:eco</code>: More aggressive algorithm, which results in smaller files of slightly lower visual quality. Example of a target audience: popular sites and social networks with a huge amount of traffic.
+
+- <code>q_auto:low</code>: Most aggressive algorithm, which results in the smallest files of low visual quality. Example of a target audience: sites using thumbnail images that link to higher quality images.
+
+Source: <a target="_blank" href="https://cloudinary.com/documentation/image_optimization#automatic_quality_selection_q_auto">Cloudinary Official Documentation</a>
+
+### Responsive Images
+
+Devices such as Laptop or TV requires a image with high resolution, so that it is not pixelated when rendered. Similarly, a smaller screen size device - might not be required to render a high resolution image that is not required. We'll need to optimize the images for different size devices. 
+
+#### The `<picture>` element
+
+The `<picture>` HTML element contains zero or more `<source>` elements and one `<img>` element to offer alternative versions of an image for different display/device scenarios. - <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/picture"><i>MDN Docs</i></a>
+
+We'll replace our existing `<img>` with the `<picture>`:
+
+```html
+<picture>
+	<source 
+		srcSet="https://res.cloudinary.com/demo/image/upload/q_auto:low/hero-background.avif" 
+		type="image/avif" 
+		media="(max-width: 640px)"
+	/>
+
+	<source 
+		srcSet="https://res.cloudinary.com/demo/image/upload/q_auto:good/hero-background.avif" 
+		type="image/avif" 
+		media="(max-width: 1920px)"
+	/>
+
+	<source 
+		srcSet="https://res.cloudinary.com/demo/image/upload/q_auto:best/hero-background.avif" 
+		type="image/avif" 
+		media="(min-width: 1921px)"
+	/>
+
+	<img 
+		src="https://res.cloudinary.com/demo/image/upload/q_auto:good/hero-background.avif"
+		alt="Hero Background Image"
+	/>
+</picture>
+```
+<ol>
+	<li>`<source>` element offers same same media in multiple file formats based on the `media` attribute.</li>
+
+	<li>`<img>` element describes the size and other attributes of the image and its presentation and act as a fallback in case none of the offered `<source>` elements are able to provide a usable image.</li>
+</ol>
+
+<img
+  src="/images/image-asset-optimization/2-devtools-network-image-good.png"
+  style={{margin: 'auto' }}
+/>
+
+Though, we rendered the image using best compression algorithm by adding `q_auto:low` parameter for small screen devices but the actual dimensions of the image downloaded is still as the original image `2000x1125` which is not required. To fix this, we'll simply add another parameter `w_<size>` in the url:
+
+<code>https://res.cloudinary.com/demo/image/upload/q_auto:good,<strong style={{color:"red"}}>w_640</strong>/hero-background.avif</code>
+
+Update all `<source>` elements `srcSet` attribute value with respective width parameter.
+
+> We can optimize subsequently loads of the same image using `Cache-Control` header but as we our using Cloudinary - caching is managed by the CDN itself.
+
+### Set the Priority: `fetchPriority`
+
+The `fetchPriority` attribute allows a developer to signal that fetching a particular image early in the loading process has more or less impact on user experience than a browser can reasonably infer when assigning an internal priority. 
+
+In the `<img>` tag of our `<picture>` element add the attribute `fetchPriority="high"`, signalling this image is important to load. 
+
+Additionally, for images such as hero image, developers can use <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/preload"><i>preloading</i></a> to complement the `fetchPriority` attribute and significantly contriuting to the webiste's <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/preload"><i>Largest Contentful Paint</i></a> (LCP).
+
+```html
+<link 
+	rel="preload" 
+	as="image" 
+	type="image/avif" 
+	href="https://res.cloudinary.com/demo/image/upload/q_auto:good/hero-background.avif" 
+/>
+```
+
+Ensure, to add the `loading=lazy` attribute to `<img>` which does not require load until a user scrolls to the section. Read more about Lazy Loading <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Lazy_loading#images_and_iframes"><i>here</i></a>.
+
+<i>Source: <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/fetchpriority"><i>MDN Docs</i></a></i>
+
+
+---
+
+Wohoo! We have successfully optimized our hero image and got our load time down to 1s from 8.8s. Along with that we got our <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/preload"><i>Largest Contentful Paint</i></a> (LCP) from 7.84s down to 1.22s.
