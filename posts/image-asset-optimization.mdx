@@ -19,7 +19,7 @@ tags: Optimization, Images, React
 
 Does your app feel slow? Do users complain about content taking a long time to load? If your app has too many images, this guide will walk you through essential optimization techniques to fix those performance bottlenecks.
 
-If you prefer watching video, check that out on YouTube: <a target="_blank" href="https://youtu.be/uNR28b8fgpg?si=D4n5uUNZjwG193r1">Image Asset Optimizations</a>
+If you prefer watching a video, check that out on YouTube: <a target="_blank" href="https://youtu.be/uNR28b8fgpg?si=D4n5uUNZjwG193r1">Image Asset Optimizations</a>
 
 We'll be optimizing the image assets for <a target="_blank" href="https://youtu.be/7RqHs8TADOI?si=qWi7zAFPt-pWwrWp">**Reactflix** (a Netflix clone)</a> and referring to it as our app throughout this blog.
 
@@ -81,7 +81,7 @@ There are Command Line (CLI) tools available to convert your images into **AVIF*
   target="_blank"
   href="https://developer.chrome.com/docs/performance/insights/image-delivery#use_modern_image_formats"
 >
-  <i>Chrome for Developer Docs for Modern Image Formats</i>
+  <i>Chrome for Developers Docs for Modern Image Formats</i>
 </a>
 
 ### Step 4: Automatic quality selection
@@ -157,17 +157,17 @@ The HTML `<picture>` element allows you to offer alternative versions of an imag
 
 <img
   src="/images/image-asset-optimization/2-devtools-network-image-good.avif"
-  alt="Chrome DevTools Network tab showing the url change based on screen size specified in the picture element's source tag's srcset attribute"
+  alt="Chrome DevTools Network tab showing the url change based on the screen size specified in the picture element's source tag's srcset attribute"
   style={{ margin: 'auto' }}
 />
 
-Though, we rendered the image using best compression algorithm by adding `q_auto:low` parameter for small screen devices but the actual dimensions of the image downloaded is still as the original image `2000x1125` which is not required. To fix this, we'll simply add another parameter `w_<size>` in the url:
+Although we rendered the image using best compression algorithm by adding `q_auto:low` parameter for small screen devices but the actual dimensions of the image downloaded is still as the original image `2000x1125` which is not required. To fix this, we'll simply add another parameter `w_<size>` in the url:
 
 <code>https://res.cloudinary.com/demo/image/upload/q_auto:good,<strong style={{color:"red"}}>w_640</strong>/hero-background.avif</code>
 
 Update all `<source>` elements `srcSet` attribute value with respective width parameter.
 
-> We can optimize subsequently loads of the same image using `Cache-Control` header but as we are using Cloudinary - caching is managed by the CDN itself.
+> We can optimize subsequent loads of the same image using `Cache-Control` header but as we are using Cloudinary - caching is managed by the CDN itself.
 
 ### Set the Priority: `fetchPriority`
 
@@ -197,4 +197,4 @@ Use `loading="lazy"` only for below-the-fold or otherwise non-critical images. K
 
 ---
 
-Wohoo! We have successfully optimized our hero image and got our load time down to 1s from 8.8s. Along with that we got our <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/preload"><i>Largest Contentful Paint</i></a> (LCP) from 7.84s down to 1.22s.
+Wohooo! We have successfully optimized our hero image and got our load time down to 1s from 8.8s. Along with that we got our <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Glossary/Largest_contentful_paint"><i>Largest Contentful Paint</i></a> (LCP) from 7.84s down to 1.22s.
